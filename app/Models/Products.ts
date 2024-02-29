@@ -4,19 +4,20 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 // Define the interface for the user document
 interface ProductsDocument extends Document {
-    product_name: string;
-    quantity: number;
-    price: number;
+    name: string;
     image: string;
-
+    stock: number;
+    price: number;
+    is_active: boolean
 }
 
 // Define the schema for the user document
 const productsSchema: Schema<ProductsDocument> = new Schema({
-    product_name: String,
-    quantity: Number,
+    name: String,
+    image: String,
+    stock: Number,
     price: Number,
-    image: String
+    is_active: Boolean
 
 });
 
