@@ -44,16 +44,14 @@ export default class productRepository {
     }
 
 
-    public async addToCart( items,total_price,user_id,quantity ): Promise<any> {
+    public async addToCart( items,user_id ): Promise<any> {
  
       try {
-        
+        console.log("cart add in cart",items);
 
       const isCartExist = await Cart.create({
         items:items,
-        total_price:total_price,
-        user_id:user_id,
-        quantity:quantity
+        user_id:user_id
       })
       if(!isCartExist){
         return 'failed cart'
@@ -68,24 +66,24 @@ export default class productRepository {
    }
   } 
 
-    public async updateCart( quantity ): Promise<any> {
+//     public async updateCart( quantity ): Promise<any> {
  
-    try {
+//     try {
       
    
-      const isCartExist = await Cart.updateOne({
-        quantity:quantity
-      })
-      if(!isCartExist){
-        return 'your updation is failed'
-      }
+//       const isCartExist = await Cart.updateOne({
+//         quantity:quantity
+//       })
+//       if(!isCartExist){
+//         return 'your updation is failed'
+//       }
             
-      let Response = { isCartExist };
+//       let Response = { isCartExist };
   
-      return Response
-    }
-   catch (error) {
-      return error;
-  }
-}
+//       return Response
+//     }
+//    catch (error) {
+//       return error;
+//   }
+// }
 }

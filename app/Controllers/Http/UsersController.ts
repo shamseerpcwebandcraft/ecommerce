@@ -3,7 +3,6 @@
 //  import { makeJsonResponse, APIResponse } from '../../../utils/JsonResponse'
  import CreateUserValidator from 'App/Validators/CreateUserValidator'
  import VerifyOtpValidator from 'App/Validators/VerifyOtpValidator'
- import ProductCreateValidator from 'App/Validators/ProductCreateValidator'
  import UserLoginValidator from 'App/Validators/UserLoginValidator'
  import userRepository from 'App/Repositories/userRepository'
 import { makeJsonResponse,APIResponse } from 'App/utils/JsonResponse'
@@ -16,7 +15,7 @@ export default class UsersController {
       }
 
    public async sendotp(ctx:HttpContextContract){
-    console.log("hiiiii");
+
     let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
     let isSuccess: boolean = false
     makeJsonResponse
@@ -34,7 +33,7 @@ export default class UsersController {
     }
 
     if (!otpVerificationResponse) {
-      return ctx.response.status(401).json("your mobile number is already used")
+      return ctx.response.status(401).json({ message: "Your mobile number is already used" });
     } else {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
@@ -104,7 +103,7 @@ public async login(ctx:HttpContextContract){
 
   if (!otpVerificationResponse) {
     response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-  } else(!otpVerificationResponse.error) {
+  } else if(!otpVerificationResponse.error) {
       httpStatusCode = HttpStatusCodes.HTTP_OK;
       isSuccess = true;
       response = makeJsonResponse(

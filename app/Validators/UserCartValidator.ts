@@ -24,10 +24,17 @@ export default class UserCartValidator {
    *    ```
    */
   public schema = schema.create({
-    items : schema.array().members(schema.number()),
-    total_price : schema.number(),
-    user_id : schema.number(),
-    quantity : schema.number()
+    items: schema.array().members(
+      schema.object().members({
+        id: schema.string(),
+        // name: schema.string(),
+        quantity: schema.number(),
+        // price: schema.number()
+      })
+    ),
+    // total_price : schema.number(),
+    // user_id : schema.number(),
+    // items_count : schema.number()
   })
 
   /**
@@ -43,8 +50,8 @@ export default class UserCartValidator {
    */
   public messages: CustomMessages = {
     'cart.items.required': 'Missing value for items',
-    'cart.total_price.required': 'Missing value for phone number',
-    'cart.user_id.required': 'Missing value for user_id',
-    'cart.quantity.required': 'Missing value for quantity'
+    // 'cart.total_price.required': 'Missing value for phone number',
+    // 'cart.user_id.required': 'Missing value for user_id',
+    // 'cart.items_count.required': 'Missing value for quantity'
   }
 }

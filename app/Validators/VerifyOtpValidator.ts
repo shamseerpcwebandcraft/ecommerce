@@ -1,6 +1,5 @@
-import { schema, CustomMessages,rules } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { DateTime } from 'luxon'
 
 export default class VerifyOtpValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -24,18 +23,12 @@ export default class VerifyOtpValidator {
    *     ])
    *    ```
    */
-  public refs = schema.refs({
-    experation_time: DateTime.local().plus({ hour: 1 })
-  })
 
 
 
   public schema = schema.create({
     otp: schema.number(),
-    phone_number: schema.number(),
-    joining_date: schema.date({}, [
-      rules.before(2, 'days')
-    ])
+    phone_number: schema.number()
   })
 
   /**

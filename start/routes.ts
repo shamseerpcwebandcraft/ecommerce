@@ -24,7 +24,7 @@ Route.get('/', async () => {
   return { hello: 'world' }
 })
 
-Route.post('auth/signup', async () => {
+Route.post('/auth/signup', async () => {
   return { hello: 'world' }
 })
 
@@ -35,7 +35,7 @@ Route.post("/auth/login", "UsersController.login");
 Route.post("/product", "ProductsController.addproduct");
 Route.get("/product", "ProductsController.listproduct").middleware('auth')
 Route.post("/cart", "ProductsController.addToCart").middleware('auth')
-Route.put("/cart", "ProductsController.updateCart").middleware('auth')
+// Route.put("/cart", "ProductsController.updateCart").middleware('auth')
 
 
 
