@@ -28,13 +28,13 @@ export default class UsersController {
     const otpVerificationResponse = await this.userRepository.sendotp(phone_number)
     console.log(otpVerificationResponse,"otpVerificationResponse");
 
-    if(otpVerificationResponse){
-      console.log("hi")
-      response = makeJsonResponse(otpVerificationResponse.response, {}, {}, httpStatusCode)
+    if(otpVerificationResponse==false){
+      console.log("helo mone")
+      response = makeJsonResponse('your mobile is already entered', {}, {}, httpStatusCode)
     }
 
-    if (otpVerificationResponse.messege) {
-      return ctx.response.status(401).json(otpVerificationResponse)
+    if (!otpVerificationResponse) {
+      return ctx.response.status(401).json("your mobile number is already used")
     } else {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
@@ -61,13 +61,16 @@ public async verifyotp(ctx:HttpContextContract){
 
     const otpVerificationResponse = await this.userRepository.verifyOtp(otp,phone_number)
     console.log(otpVerificationResponse)
-    if(otpVerificationResponse){
-      response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
+    if(otpVerificationResponse.error){
+      console.log("nayint");
+      response = otpVerificationResponse.error
+      ctx.response.status(httpStatusCode).json(response)
     }
+    
 
     if (!otpVerificationResponse) {
       response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-    } else {
+    } else if(!otpVerificationResponse.error) {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
         response = makeJsonResponse(
@@ -77,10 +80,11 @@ public async verifyotp(ctx:HttpContextContract){
           httpStatusCode,
           isSuccess
         );
-    ctx.response.status(httpStatusCode).json(response)
+        ctx.response.status(httpStatusCode).json(response)
        
 
    }
+  
 
 }
 
@@ -92,44 +96,15 @@ public async login(ctx:HttpContextContract){
   let { otp,phone_number} = await ctx.request.validate(UserLoginValidator)
 
   const otpVerificationResponse = await this.userRepository.login(otp,phone_number)
-  if(otpVerificationResponse.invalidmobile){
-    response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
+  if(otpVerificationResponse.error){
+    console.log("nayint");
+    response = otpVerificationResponse.error
+    ctx.response.status(httpStatusCode).json(response)
   }
 
   if (!otpVerificationResponse) {
     response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-  } else {
-      httpStatusCode = HttpStatusCodes.HTTP_OK;
-      isSuccess = true;
-      response = makeJsonResponse(
-        "user login successfully",
-        otpVerificationResponse,
-        {},
-        httpStatusCode,
-        isSuccess
-      );
-  ctx.response.status(httpStatusCode).json(response)
-     
-
- }
-
-}
-
-public async addproduct(ctx:HttpContextContract){
-  let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
-  let isSuccess: boolean = false
-  let response: APIResponse
-
-  let { name,price,image,stock,is_active } = await ctx.request.validate(ProductCreateValidator)
-
-  const otpVerificationResponse = await this.userRepository.login(name,price,image,stock,is_active)
-  if(otpVerificationResponse.invalidmobile){
-    response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-  }
-
-  if (!otpVerificationResponse) {
-    response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-  } else {
+  } else(!otpVerificationResponse.error) {
       httpStatusCode = HttpStatusCodes.HTTP_OK;
       isSuccess = true;
       response = makeJsonResponse(
@@ -147,4 +122,8 @@ public async addproduct(ctx:HttpContextContract){
 }
 
 
+
 }
+
+
+

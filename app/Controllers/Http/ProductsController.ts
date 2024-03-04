@@ -4,7 +4,7 @@ import productRepository from 'App/Repositories/productRepository'
 import { HttpStatusCodes } from 'App/utils/HttpStatuses'
 import { APIResponse, makeJsonResponse } from 'App/utils/JsonResponse'
 import ProductCreateValidator from 'App/Validators/ProductCreateValidator'
-
+import UserCartValidator from 'App/Validators/UserCartValidator'
 
 
 export default class ProductsController {
@@ -14,37 +14,133 @@ export default class ProductsController {
         this.productRepository = new productRepository()
       }
 
+      public async addproduct(ctx:HttpContextContract){
+           const products=[{
+              
+                id: 1,
+                name: 'iphone 6',
+                image:'iphone6.jpg',
+                stock:6,
+                price:20000,
+                is_active:true
+           }
+              ,
+              {
+              
+                id: 1,
+                name: 'sumsung s24',
+                image:'iphone6.jpg',
+                stock:6,
+                price:20000,
+                is_active:true
+           },
+           {
+              
+            id: 1,
+            name: 'iqoo neo 7',
+            image:'iphone6.jpg',
+            stock:6,
+            price:20000,
+            is_active:true
+       },
+       {
+              
+        id: 1,
+        name: 'oppo f23',
+        image:'iphone6.jpg',
+        stock:6,
+        price:20000,
+        is_active:true
+   },
+
+            ]
+
+            const response= await this.productRepository.createProducts(products)
+
+            if(response){
+              ctx.response.status(201).json(response)
+            }
+           }
+
+  
+
+      
+
+
+
    public async listproduct(ctx:HttpContextContract){
-    console.log("hiiiii");
     let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
     let isSuccess: boolean = false
-    makeJsonResponse
-    let response: APIResponse
-
-    const 
-
-   }
-
-   public async listproduct(ctx:HttpContextContract){
-    let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
-    let isSuccess: boolean = false
     let response: APIResponse
   
-    //let { name,price,image,stock,is_active } = await ctx.request.validate(ProductCreateValidator)
+    let { name,price,image,stock,is_active } = await ctx.request.validate(ProductCreateValidator)
   
-    const otpVerificationResponse = await this.productRepository.listproducts()
-    if(otpVerificationResponse.invalidmobile){
-      response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-    }
+    const productListingResponse = await this.productRepository.listproducts()
   
-    if (!otpVerificationResponse) {
-      response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
+    if (!productListingResponse) {
+      response = makeJsonResponse('no products available', {}, {}, httpStatusCode)
     } else {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
         response = makeJsonResponse(
-          "user login successfully",
-          otpVerificationResponse,
+          "product listing successfully",
+          productListingResponse,
+          {},
+          httpStatusCode,
+          isSuccess
+        );
+    ctx.response.status(httpStatusCode).json(response)
+       
+  
+   }
+  
+  }
+
+
+  public async addToCart(ctx:HttpContextContract){
+    let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
+    let isSuccess: boolean = false
+    let response: APIResponse
+  
+    let { items,total_price,user_id,quantity } = await ctx.request.validate(UserCartValidator)
+  
+    const productListingResponse = await this.productRepository.addToCart( items,total_price,user_id,quantity )
+  
+    if (!productListingResponse) {
+      response = makeJsonResponse('no products available', {}, {}, httpStatusCode)
+    } else {
+        httpStatusCode = HttpStatusCodes.HTTP_OK;
+        isSuccess = true;
+        response = makeJsonResponse(
+          "cart listing successfully",
+          productListingResponse,
+          {},
+          httpStatusCode,
+          isSuccess
+        );
+    ctx.response.status(httpStatusCode).json(response)
+       
+  
+   }
+  
+  }
+  public async updateCart(ctx:HttpContextContract){
+    let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
+    let isSuccess: boolean = false
+    let response: APIResponse
+  
+    let { quantity } = await ctx.request.validate(UserCartValidator)
+  
+    const productListingResponse = await this.productRepository.updateCart( quantity )
+  
+    if (!productListingResponse) {
+      response = makeJsonResponse('no products available', {}, {}, httpStatusCode)
+    } else {
+        httpStatusCode = HttpStatusCodes.HTTP_OK;
+        isSuccess = true;
+        response = makeJsonResponse(
+          "cart quantity updation successfully",
+          productListingResponse,
           {},
           httpStatusCode,
           isSuccess

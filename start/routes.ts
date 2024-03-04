@@ -32,9 +32,10 @@ Route.post("/auth/sendotp", "UsersController.sendotp");
 // Route.post("/auth/verifyotp", "UsersController.verifyotp");
 Route.post("/auth/verifyotp", "UsersController.verifyotp");
 Route.post("/auth/login", "UsersController.login");
-Route.post("/product", "UsersController.createproduct");
-Route.get("/product", "ProductsController.listproduct");
-Route.post("/cart", "UsersController.addcart");
+Route.post("/product", "ProductsController.addproduct");
+Route.get("/product", "ProductsController.listproduct").middleware('auth')
+Route.post("/cart", "ProductsController.addToCart").middleware('auth')
+Route.put("/cart", "ProductsController.updateCart").middleware('auth')
 
 
 

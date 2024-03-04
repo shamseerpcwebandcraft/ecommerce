@@ -6,12 +6,14 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 interface UserDocument extends Document {
     phone_number: number;
     otp: number;
+    expiration_time:Date
 }
 
 // Define the schema for the user document
 const userSchema: Schema<UserDocument> = new Schema({
     phone_number: Number,
-    otp: Number
+    otp: Number,
+    expiration_time:Date
 });
 
 // Define the model for the user document

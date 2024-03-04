@@ -1,8 +1,7 @@
-import { schema, CustomMessages,rules } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
-import { DateTime } from 'luxon'
 
-export default class VerifyOtpValidator {
+export default class UserCartValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,18 +23,11 @@ export default class VerifyOtpValidator {
    *     ])
    *    ```
    */
-  public refs = schema.refs({
-    experation_time: DateTime.local().plus({ hour: 1 })
-  })
-
-
-
   public schema = schema.create({
-    otp: schema.number(),
-    phone_number: schema.number(),
-    joining_date: schema.date({}, [
-      rules.before(2, 'days')
-    ])
+    items : schema.array().members(schema.number()),
+    total_price : schema.number(),
+    user_id : schema.number(),
+    quantity : schema.number()
   })
 
   /**
@@ -50,7 +42,9 @@ export default class VerifyOtpValidator {
    *
    */
   public messages: CustomMessages = {
-    'user.otp.required': 'Missing value for otp',
-    'user.phone_number.required': 'Missing value for phone number'
+    'cart.items.required': 'Missing value for items',
+    'cart.total_price.required': 'Missing value for phone number',
+    'cart.user_id.required': 'Missing value for user_id',
+    'cart.quantity.required': 'Missing value for quantity'
   }
 }
