@@ -4,8 +4,8 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 interface CartsDocument extends Document {
     items: any[]; // Or specify a more specific type for items
     total_price: number;
-    user_id: number;
-    items_count: number;
+    user_id:string;
+    phonenumber: string;
     delete_status: boolean; // Corrected type declaration
 }
 
@@ -13,8 +13,8 @@ interface CartsDocument extends Document {
 const cartsSchema: Schema<CartsDocument> = new Schema({
     items: Array,
     total_price: Number,
-    user_id: Number,
-    items_count: Number,
+    phonenumber: String,
+    user_id: String,
     delete_status: Boolean // Corrected type declaration
 });
 

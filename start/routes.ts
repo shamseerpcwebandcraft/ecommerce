@@ -35,7 +35,9 @@ Route.post("/auth/login", "UsersController.login");
 Route.post("/product", "ProductsController.addproduct");
 Route.get("/product", "ProductsController.listproduct").middleware('auth')
 Route.post("/cart", "ProductsController.addToCart").middleware('auth')
-// Route.put("/cart", "ProductsController.updateCart").middleware('auth')
+Route.get("/cart", "ProductsController.getCart").middleware('auth')
+Route.post("/cart/:id", "ProductsController.updateCart").middleware('auth')
+Route.post("/checkout", "ProductsController.checkout").middleware('auth')
 
 
 

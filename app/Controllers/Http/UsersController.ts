@@ -61,7 +61,7 @@ public async verifyotp(ctx:HttpContextContract){
     const otpVerificationResponse = await this.userRepository.verifyOtp(otp,phone_number)
     console.log(otpVerificationResponse)
     if(otpVerificationResponse.error){
-      console.log("nayint");
+      console.log("int");
       response = otpVerificationResponse.error
       ctx.response.status(httpStatusCode).json({response})
     }

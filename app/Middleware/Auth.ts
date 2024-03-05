@@ -8,19 +8,19 @@ export default class Auth {
     console.log("Read here123")
 
     const  token=ctx.request.header('authorization')?.replace('Bearer ', '');
-    console.log(token)
+
     if (!token) {
-      return ctx.response.unauthorized('Unauthorized access')
+      return ctx.response.unauthorized({ error: 'Must be logged in' })
     }
     
     const publicKey: any = Env.get('JWT_SECRET')
-    console.log(publicKey);
+
      try {
       var decoded:any = jwt.verify(token, publicKey);
       const userId = decoded.user_id;
        console.log(userId); // Output: 65e56515a6ff1705d8b6d25a
       // const user=await User.findOne({user_id:decoded.user_id})
-      ctx.request.user.user_id=userId
+      ctx.request.user={userId:userId}
     } catch(err) {
       console.log(err)
       // err

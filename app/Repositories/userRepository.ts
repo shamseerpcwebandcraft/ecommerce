@@ -45,9 +45,11 @@ export default class userRepository {
         console.log(isUserExist)    
 
         if (isUserExist && isUserExist.expiration_time) {
-        //  const expirationTimeISO = isUserExist.expiration_time.toISOString();
-          if (DateTime.fromJSDate(isUserExist.expiration_time) < DateTime.now()) {
-                  
+               
+          //const expirationTimeISO = isUserExist.expiration_time.toISOString();
+     
+          if (DateTime.fromJSDate(isUserExist.expiration_time) > DateTime.now()) {
+                 
         
               if (isUserExist.otp == otp) {
                 console.log("isuserexist.otp")
