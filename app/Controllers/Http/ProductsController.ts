@@ -93,6 +93,7 @@ export default class ProductsController {
     let isSuccess: boolean = false
     let response: APIResponse
     const user_id= ctx.request.user
+    console.log(user_id);
   
     let { items } = await ctx.request.validate(UserCartValidator)
   

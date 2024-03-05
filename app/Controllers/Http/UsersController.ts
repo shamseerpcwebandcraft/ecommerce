@@ -63,7 +63,7 @@ public async verifyotp(ctx:HttpContextContract){
     if(otpVerificationResponse.error){
       console.log("nayint");
       response = otpVerificationResponse.error
-      ctx.response.status(httpStatusCode).json(response)
+      ctx.response.status(httpStatusCode).json({response})
     }
     
 
@@ -98,7 +98,7 @@ public async login(ctx:HttpContextContract){
   if(otpVerificationResponse.error){
     console.log("nayint");
     response = otpVerificationResponse.error
-    ctx.response.status(httpStatusCode).json(response)
+    ctx.response.status(httpStatusCode).json({response})
   }
 
   if (!otpVerificationResponse) {

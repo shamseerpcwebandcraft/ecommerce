@@ -14,7 +14,7 @@ export default class userRepository {
       console.log("hii0oooppp");
       const otp = Math.floor(100000 + Math.random() * 900000)
 
-      const expiration_time=DateTime.local().plus({ minutes: 30 })
+      const expiration_time=DateTime.local().plus({ days: 1 })
  
       console.log(expiration_time)
   
@@ -58,7 +58,7 @@ export default class userRepository {
                   const payload={
                     user_id: isUserExist.id
                   }
-                  const token = jwt.sign(payload, Env.get('JWT_SECRET'), { expiresIn: '7d' });
+                  const token = jwt.sign(payload, Env.get('JWT_SECRET'), { expiresIn: '5d' });
                   console.log(token)
                   return {
                     status: "success",

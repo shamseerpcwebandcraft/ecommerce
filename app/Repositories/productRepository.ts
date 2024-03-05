@@ -1,5 +1,6 @@
 import Product from "App/Models/Products";
 import Cart from "App/Models/Cart";
+import Products from "App/Models/Products";
 
 export default class productRepository {
     constructor() {
@@ -44,27 +45,45 @@ export default class productRepository {
     }
 
 
-    public async addToCart( items,user_id ): Promise<any> {
- 
+    public async addToCart(items, user_id): Promise<any> {
       try {
-        console.log("cart add in cart",items);
-
-      const isCartExist = await Cart.create({
-        items:items,
-        user_id:user_id
-      })
-      if(!isCartExist){
-        return 'failed cart'
-      }
-            
-      let Response = { isCartExist };
+        console.log("cart add in cart", items);
+    
+        let total_price = 0; 
+    
+        for (const { id, quantity } of items) {
   
-      return Response
+          const product = await Product.findOne({ id: id });
+    
+          if (product) {
+            const price = product.price;
+          
+            total_price += price * quantity;
+          } else {
+
+          }
+        }
+    
+     
+        const isCartExist = await Cart.create({
+          items: items,
+          user_id: user_id,
+          total_price: total_price 
+        });
+    
+        if (!isCartExist) {
+         
+          return 'failed cart';
+        }
+    
+        
+        return { isCartExist };
+      } catch (error) {
+      
+        return error;
+      }
     }
-   catch (error) {
-      return error  
-   }
-  } 
+    
 
 //     public async updateCart( quantity ): Promise<any> {
  
