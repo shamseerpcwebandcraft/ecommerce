@@ -48,13 +48,13 @@ export default class productRepository {
 
     public async addToCart(items, user_id): Promise<any> {
       try {
-        let response:any
         console.log("pushpa")
         console.log("items====",items)
         console.log("user_id====",user_id)
-        const isUserExist=await Cart.find({user_id:user_id})
-        if(isUserExist){
-          return {response:"data is already used"}
+        const existingCart = await Cart.findOne({ user_id: user_id });
+        console.log("isCartExist==",existingCart)
+        if(existingCart){
+          return { error: 'user is already added cart' } 
         }
     
         let total_price = 0; 
@@ -101,9 +101,10 @@ export default class productRepository {
     }
 
 
-    public async updateCart(cartId, items): Promise<any> {
+    public async updateCart(user_id, items): Promise<any> {
       try {
-        const cart = await Cart.findById(cartId);
+        console.log("user_id==",user_id)
+        const cart = await Cart.findById(user_id);
     
         if (!cart) {
           throw new Error('Cart not found');
@@ -193,6 +194,31 @@ export default class productRepository {
         return error;
       }
     }
+
+    public async markDelivered(order_id): Promise<any> {
+      try {
+        // Find the order by its ID
+        const order = await Order.findById(order_id);
+        
+        if (!order) {
+          // If the order doesn't exist, return an error
+          return { error: 'Order not found' };
+        }
+        
+        // Update the delivered_status of the order to 'delivered'
+        order.delivered_status = 'delivered';
+        
+        // Save the updated order
+        await order.save();
+        
+        // Return a response indicating success
+        return { message: 'Order marked as delivered successfully' };
+      } catch (error) {
+        // Handle any errors that occur during the process
+        return error;
+      }
+    }
+    
 
 
     

@@ -100,10 +100,15 @@ export default class ProductsController {
          console.log("pushpa 2")
     const addtoCartResponse = await this.productRepository.addToCart( items,user_id )
     console.log(addtoCartResponse)
+    if(addtoCartResponse.error){
+      console.log("int");
+      response = addtoCartResponse.error
+      ctx.response.status(httpStatusCode).json({response})
+    }
   
-    if (!addtoCartResponse.response) {
+    if (!addtoCartResponse) {
       response = makeJsonResponse('no product available in cart', {}, {}, httpStatusCode)
-    } else {
+    } else if(!addtoCartResponse.error) {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
         response = makeJsonResponse(
@@ -113,10 +118,12 @@ export default class ProductsController {
           httpStatusCode,
           isSuccess
         );
-    ctx.response.status(httpStatusCode).json(response)
-       
+  
+        ctx.response.status(httpStatusCode).json(response);
   
    }
+
+   
   
   }
 
@@ -156,11 +163,11 @@ export default class ProductsController {
     let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
     let isSuccess: boolean = false
     let response: APIResponse
-    const cartId=ctx.request.param
+    const user_id= ctx.request.user.userId
   
     let { items } = await ctx.request.validate(UserCartUpdateValidator)
   
-    const productListingResponse = await this.productRepository.updateCart( cartId,items )
+    const productListingResponse = await this.productRepository.updateCart( user_id,items )
   
     if (!productListingResponse) {
       response = makeJsonResponse('no products available', {}, {}, httpStatusCode)
@@ -190,6 +197,35 @@ export default class ProductsController {
     //let { items } = await ctx.request.validate(UserCartValidator)
          console.log("pushpa 2")
     const getUserCartResponse = await this.productRepository.getCart( user_id )
+  
+    if (!getUserCartResponse) {
+      response = makeJsonResponse('cart is not available', {}, {}, httpStatusCode)
+    } else {
+        httpStatusCode = HttpStatusCodes.HTTP_OK;
+        isSuccess = true;
+        response = makeJsonResponse(
+          "cart listing successfully",
+          getUserCartResponse,
+          {},
+          httpStatusCode,
+          isSuccess
+        );
+    ctx.response.status(httpStatusCode).json(response)
+       
+  
+   }
+  
+  }
+
+  public async markDelivered(ctx:HttpContextContract){
+    let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
+    let isSuccess: boolean = false
+    let response: APIResponse
+    const order_id= ctx.request.params('orderId')
+  
+    //let { items } = await ctx.request.validate(UserCartValidator)
+         console.log("pushpa 2")
+    const getUserCartResponse = await this.productRepository.markDelivered( order_id )
   
     if (!getUserCartResponse) {
       response = makeJsonResponse('cart is not available', {}, {}, httpStatusCode)
