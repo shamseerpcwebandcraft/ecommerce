@@ -6,6 +6,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 interface UserDocument extends Document {
     phone_number: number;
     otp: number;
+    roles: string;
     expiration_time:Date
 }
 
@@ -13,6 +14,7 @@ interface UserDocument extends Document {
 const userSchema: Schema<UserDocument> = new Schema({
     phone_number: Number,
     otp: Number,
+    roles: { type: String, default: 'user' },
     expiration_time:Date
 });
 

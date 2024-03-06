@@ -11,7 +11,7 @@ export default class userRepository {
     }
   
     public async sendotp(phone_number): Promise<any> {
-      console.log("hii0oooppp");
+    
       const otp = Math.floor(100000 + Math.random() * 900000)
 
       const expiration_time=DateTime.local().plus({ days: 1 })
@@ -20,7 +20,7 @@ export default class userRepository {
   
       const isUserExist = await User.findOne({ phone_number: phone_number });
       if (!isUserExist) {
-            console.log("user is not exist");
+
 
           await User.create(
             { phone_number: phone_number, 
@@ -42,7 +42,7 @@ export default class userRepository {
       try{
 
         const isUserExist = await User.findOne({ phone_number: phone_number });
-        console.log(isUserExist)    
+ 
 
         if (isUserExist && isUserExist.expiration_time) {
                
@@ -52,7 +52,7 @@ export default class userRepository {
                  
         
               if (isUserExist.otp == otp) {
-                console.log("isuserexist.otp")
+
                   await User.updateOne(
                     { phone_number: phone_number },
                     { otp: otp }
@@ -61,7 +61,7 @@ export default class userRepository {
                     user_id: isUserExist.id
                   }
                   const token = jwt.sign(payload, Env.get('JWT_SECRET'), { expiresIn: '5d' });
-                  console.log(token)
+
                   return {
                     status: "success",
                     token

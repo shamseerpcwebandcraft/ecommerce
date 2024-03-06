@@ -10,15 +10,11 @@ export default class productRepository {
     public async createProducts(products: { id: number; name: string; image: string; stock: number; price: number; is_active: boolean; }[]): Promise<any> {
      
        try {
-        console.log(products)
-        
-        
-        
       
       const response = await Product.insertMany(
         products
         );
-        console.log(response)
+
             
       if(response){
         return response
@@ -35,9 +31,9 @@ export default class productRepository {
          try {
           
        
-      const isUserExist = await Product.find({is_active:true});
+      const isProductExist = await Product.find({is_active:true});
             
-      let Response = { isUserExist };
+      let Response = { isProductExist };
   
       return Response
     } catch (error) {
@@ -48,11 +44,9 @@ export default class productRepository {
 
     public async addToCart(items, user_id): Promise<any> {
       try {
-        console.log("pushpa")
-        console.log("items====",items)
-        console.log("user_id====",user_id)
+
         const existingCart = await Cart.findOne({ user_id: user_id });
-        console.log("isCartExist==",existingCart)
+
         if(existingCart){
           return { error: 'user is already added cart' } 
         }
@@ -60,17 +54,17 @@ export default class productRepository {
         let total_price = 0; 
     
         for (const { id, quantity } of items) {
-          console.log("product idsss===",id)
+
   
           const product = await Product.findOne({ _id: id });
     
           //quantity is lessthan the stock
-          if (product?.stock !== undefined && product?.stock > 0) {
+          if (product?.stock == | > quantity  && product?.stock > 0) {
             const price = product.price;
           
             total_price += price * quantity;
           } else {
-            return 'product is not available';
+            return { error: 'product is not available' }  
           }
         }
         if(user_id){
@@ -103,8 +97,8 @@ export default class productRepository {
 
     public async updateCart(user_id, items): Promise<any> {
       try {
-        console.log("user_id==",user_id)
-        const cart = await Cart.findById(user_id);
+
+        const cart = await Cart.findOne({user_id:user_id});
     
         if (!cart) {
           throw new Error('Cart not found');
@@ -146,7 +140,7 @@ export default class productRepository {
     public async checkout(user_details,shipping_address, user_id): Promise<any> {
       try {
          const cart=await Cart.findOne({user_id:user_id})
-         console.log(cart);
+
          const shipping_charge=40
          
          const payment_status = true
@@ -156,7 +150,8 @@ export default class productRepository {
          if(cart){
           const payable_price = (cart?.total_price ?? 0) + shipping_charge;
          
-         const order=new Order({
+         const order=await Order.create({
+          items:cart?.items,
           user_details:user_details,
           shipping_address:shipping_address,
           shipping_charge:shipping_charge,
@@ -195,8 +190,12 @@ export default class productRepository {
       }
     }
 
-    public async markDelivered(order_id): Promise<any> {
+    public async markDelivered(order_id,user_id,delivered_status): Promise<any> {
       try {
+
+        const user=await User.findOne({_id:user_id})
+        const roles=user?.roles
+        
         // Find the order by its ID
         const order = await Order.findById(order_id);
         
@@ -204,15 +203,19 @@ export default class productRepository {
           // If the order doesn't exist, return an error
           return { error: 'Order not found' };
         }
-        
+        if(roles=='delivary_agent'){
         // Update the delivered_status of the order to 'delivered'
-        order.delivered_status = 'delivered';
+        order.delivered_status = delivered_status;
         
         // Save the updated order
         await order.save();
         
+        
         // Return a response indicating success
-        return { message: 'Order marked as delivered successfully' };
+        return { message: 'delivary agent change the status' };
+        }else{
+          return { message: 'you cant access to change the delivary status' };
+        }
       } catch (error) {
         // Handle any errors that occur during the process
         return error;

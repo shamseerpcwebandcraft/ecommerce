@@ -5,6 +5,7 @@ import { APIResponse, makeJsonResponse } from 'App/utils/JsonResponse'
 import UserCartValidator from 'App/Validators/UserCartValidator'
 import UserCheckoutValidator from 'App/Validators/UserCheckoutValidator'
 import UserCartUpdateValidator from 'App/Validators/UserCartUpdateValidator'
+import DelivaryAgentValidator from 'App/Validators/DelivaryAgentValidator'
 
 export default class ProductsController {
     private productRepository: productRepository
@@ -94,15 +95,15 @@ export default class ProductsController {
     let isSuccess: boolean = false
     let response: APIResponse
     const user_id= ctx.request.user.userId
-    console.log("userdetaisss==",user_id);
   
     let { items } = await ctx.request.validate(UserCartValidator)
-         console.log("pushpa 2")
+
     const addtoCartResponse = await this.productRepository.addToCart( items,user_id )
     console.log(addtoCartResponse)
     if(addtoCartResponse.error){
-      console.log("int");
+      // response = makeJsonResponse(addtoCartResponse.error, {}, {}, httpStatusCode)
       response = addtoCartResponse.error
+      console.log("response",response)
       ctx.response.status(httpStatusCode).json({response})
     }
   
@@ -134,7 +135,6 @@ export default class ProductsController {
     let isSuccess: boolean = false
     let response: APIResponse
     const user_id= ctx.request.user.userId
-    console.log("userdetaisss==",user_id);
   
     let { user_details,shipping_address } = await ctx.request.validate(UserCheckoutValidator)
 
@@ -167,16 +167,21 @@ export default class ProductsController {
   
     let { items } = await ctx.request.validate(UserCartUpdateValidator)
   
-    const productListingResponse = await this.productRepository.updateCart( user_id,items )
+    const updateCartResponse = await this.productRepository.updateCart( user_id,items )
+    if(updateCartResponse.error){
+
+      response = updateCartResponse.error
+      ctx.response.status(httpStatusCode).json({response})
+    }
   
-    if (!productListingResponse) {
+    if (!updateCartResponse) {
       response = makeJsonResponse('no products available', {}, {}, httpStatusCode)
     } else {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
         response = makeJsonResponse(
           "cart quantity updation successfully",
-          productListingResponse,
+          updateCartResponse,
           {},
           httpStatusCode,
           isSuccess
@@ -195,7 +200,6 @@ export default class ProductsController {
     const user_id= ctx.request.user.userId
   
     //let { items } = await ctx.request.validate(UserCartValidator)
-         console.log("pushpa 2")
     const getUserCartResponse = await this.productRepository.getCart( user_id )
   
     if (!getUserCartResponse) {
@@ -221,20 +225,22 @@ export default class ProductsController {
     let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
     let isSuccess: boolean = false
     let response: APIResponse
-    const order_id= ctx.request.params('orderId')
+
+    const user_id= ctx.request.user.userId
+
+    const order_id= ctx.request.param('orderId')
   
-    //let { items } = await ctx.request.validate(UserCartValidator)
-         console.log("pushpa 2")
-    const getUserCartResponse = await this.productRepository.markDelivered( order_id )
+    let { delivered_status } = await ctx.request.validate(DelivaryAgentValidator)
+    const delivaryAgentResponse = await this.productRepository.markDelivered( order_id,user_id,delivered_status )
   
-    if (!getUserCartResponse) {
-      response = makeJsonResponse('cart is not available', {}, {}, httpStatusCode)
+    if (!delivaryAgentResponse) {
+      response = makeJsonResponse('invalid status change', {}, {}, httpStatusCode)
     } else {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
         response = makeJsonResponse(
-          "cart listing successfully",
-          getUserCartResponse,
+          "delivary agent status changing successfully",
+          delivaryAgentResponse,
           {},
           httpStatusCode,
           isSuccess

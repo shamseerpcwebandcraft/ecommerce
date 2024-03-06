@@ -28,12 +28,15 @@ export default class UsersController {
     console.log(otpVerificationResponse,"otpVerificationResponse");
 
     if(otpVerificationResponse==false){
-      console.log("helo mone")
+
       response = makeJsonResponse('your mobile is already entered', {}, {}, httpStatusCode)
+      console.log(response)
     }
 
     if (!otpVerificationResponse) {
-      return ctx.response.status(401).json({ message: "Your mobile number is already used" });
+      response = makeJsonResponse('Your mobile number is already used', {}, {}, httpStatusCode)
+      ctx.response.status(httpStatusCode).json(response)
+      //return ctx.response.status(401).json({ message: "Your mobile number is already used" });
     } else {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
@@ -59,10 +62,9 @@ public async verifyotp(ctx:HttpContextContract){
     let { otp,phone_number} = await ctx.request.validate(VerifyOtpValidator)
 
     const otpVerificationResponse = await this.userRepository.verifyOtp(otp,phone_number)
-    console.log(otpVerificationResponse)
+
     if(otpVerificationResponse.error){
-      console.log("int");
-      response = otpVerificationResponse.error
+      response = makeJsonResponse(otpVerificationResponse.error, {}, {}, httpStatusCode)
       ctx.response.status(httpStatusCode).json({response})
     }
     

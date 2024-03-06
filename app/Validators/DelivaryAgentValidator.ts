@@ -1,7 +1,7 @@
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class UserCheckoutValidator {
+export default class DelivaryAgentValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,15 +24,7 @@ export default class UserCheckoutValidator {
    *    ```
    */
   public schema = schema.create({
-    user_details: schema.object().members({
-      name: schema.string(),
-      place: schema.string()
-    }),
-    shipping_address: schema.object().members({
-      address_1: schema.string(),
-      address_2: schema.string(),
-      zip_code: schema.number()
-    })
+    delivered_status:schema.string()
   })
 
   /**
@@ -47,11 +39,6 @@ export default class UserCheckoutValidator {
    *
    */
   public messages: CustomMessages = {
-    'order.user_details.name.required': 'Missing value of name',
-    'order.user_details.place.required': 'Missing value of place',
-
-    'order.shipping_address.address_1.required': 'Missing value for address_1',
-    'order.shipping_address.address_2.required': 'Missing value for address_2',
-    'order.shipping_address.zip_code.required': 'Missing value for zip_code'
+    'order.delivered_status.required': 'Missing value for delivered_status',
   }
 }
