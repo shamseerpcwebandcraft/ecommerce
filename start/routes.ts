@@ -23,3 +23,25 @@ import Route from '@ioc:Adonis/Core/Route'
 Route.get('/', async () => {
   return { hello: 'world' }
 })
+
+Route.post('/auth/signup', async () => {
+  return { hello: 'world' }
+})
+
+Route.post("/auth/sendotp", "UsersController.sendotp");
+// Route.post("/auth/verifyotp", "UsersController.verifyotp");
+Route.post("/auth/verifyotp", "UsersController.verifyotp");
+Route.post("/auth/login", "UsersController.login");
+Route.post("/product", "ProductsController.addproduct");
+Route.get("/product", "ProductsController.listproduct")
+Route.post("/cart", "ProductsController.addToCart").middleware('auth')
+Route.get("/cart", "ProductsController.getCart").middleware('auth')
+Route.post("/cart/update", "ProductsController.updateCart").middleware('auth')
+Route.post("/checkout", "ProductsController.checkout").middleware('auth')
+Route.post("/markDelivered/:orderId", "ProductsController.markDelivered").middleware('auth')
+
+
+
+
+
+
