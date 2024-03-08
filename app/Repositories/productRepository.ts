@@ -59,13 +59,14 @@ export default class productRepository {
           const product = await Product.findOne({ _id: id });
     
           //quantity is lessthan the stock
-          if (product?.stock == | > quantity  && product?.stock > 0) {
+          if (product?.stock !== undefined && product.stock >= quantity ) {
             const price = product.price;
-          
             total_price += price * quantity;
-          } else {
-            return { error: 'product is not available' }  
-          }
+        } else {
+            return { error: 'product is not available' };
+        }
+        
+        
         }
         if(user_id){
           const user=await User.findOne({_id:user_id})
@@ -109,7 +110,7 @@ export default class productRepository {
         for (const { id, quantity } of items) {
           const product = await Product.findOne({ _id: id });
     
-          if (!product || product.stock === undefined || product.stock <= 0) {
+          if (!product || product.stock === undefined || product.stock <= quantity) {
             throw new Error('Product is not available');
           }
     

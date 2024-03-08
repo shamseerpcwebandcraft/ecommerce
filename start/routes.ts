@@ -33,7 +33,7 @@ Route.post("/auth/sendotp", "UsersController.sendotp");
 Route.post("/auth/verifyotp", "UsersController.verifyotp");
 Route.post("/auth/login", "UsersController.login");
 Route.post("/product", "ProductsController.addproduct");
-Route.get("/product", "ProductsController.listproduct")
+Route.get("/product", "ProductsController.listproduct");
 Route.post("/cart", "ProductsController.addToCart").middleware('auth')
 Route.get("/cart", "ProductsController.getCart").middleware('auth')
 Route.post("/cart/update", "ProductsController.updateCart").middleware('auth')

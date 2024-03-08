@@ -2,6 +2,7 @@ import User from "App/Models/User";
 import jwt from 'jsonwebtoken';
 import Env from '@ioc:Adonis/Core/Env'
 import { DateTime } from 'luxon'
+import otpSendService from "App/Services/otpSendServices";
 
 
 
@@ -9,28 +10,41 @@ import { DateTime } from 'luxon'
 export default class userRepository {
     constructor() {
     }
+
+
+
   
     public async sendotp(phone_number): Promise<any> {
     
       const otp = Math.floor(100000 + Math.random() * 900000)
 
       const expiration_time=DateTime.local().plus({ days: 1 })
+
+
+    const otpService=new otpSendService()
+
+      const serviceResponse= await otpService.sendOtp(otp,phone_number)
+      console.log(serviceResponse)
  
-      console.log(expiration_time)
-  
-      const isUserExist = await User.findOne({ phone_number: phone_number });
-      if (!isUserExist) {
+      const isUserExist:any = await User.findOne({ phone_number: phone_number,is_verified:true });
+      //const isVerified = isUserExist.is_verified;
+      //console.log("isVerified",isVerified)
+
+
+      if (!isUserExist&&serviceResponse) {
 
 
           await User.create(
             { phone_number: phone_number, 
              otp: otp,
-             expiration_time:expiration_time}
+             expiration_time:expiration_time,
+             is_verified:false,
+            }
           );
             
-      let debugResponse = { debug: otp };
+      let response = { otp: otp };
   
-      return debugResponse;
+      return response
             }else{
               return false;
             }
@@ -53,9 +67,9 @@ export default class userRepository {
         
               if (isUserExist.otp == otp) {
 
-                  await User.updateOne(
+                     await User.updateOne(
                     { phone_number: phone_number },
-                    { otp: otp }
+                    { otp: otp, is_verified: true } 
                   );
                   const payload={
                     user_id: isUserExist.id
@@ -66,17 +80,13 @@ export default class userRepository {
                     status: "success",
                     token
                   };
-                }else{
-                return { error: 'your otp is incorrect' }             
-                }
+                }else return false         
+              
          
-          }else{
-
-            return { error: 'your time is expired' } 
-          }
-      } else{
-        return { error: 'your mobile number is incorrect' } 
-      }
+          }else return false
+          
+      } else return false 
+      
        
       }catch(error){
         return error
@@ -100,11 +110,9 @@ export default class userRepository {
             return {
               token
             };
-          }else{return { error: 'your otp is incorrect' }}  
+          }else return false 
 
-    }else{
-      return { error: 'your mobile is incorrect' }
-    }
+    }else return false
 }
     
 }

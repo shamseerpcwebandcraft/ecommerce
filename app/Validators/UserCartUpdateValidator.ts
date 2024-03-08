@@ -46,6 +46,8 @@ export default class UserCartUpdateValidator {
    *
    */
   public messages: CustomMessages = {
-    'cart.items.required': 'Missing value for items',
+    'items.required':"at least one item is required",
+    'items.*.required': 'Missing value for items',
+
   }
 }

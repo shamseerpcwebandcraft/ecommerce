@@ -24,7 +24,7 @@ export default class CreateUserValidator {
    *    ```
    */
   public schema = schema.create({
-    //: schema.number()
+
     phone_number: schema.string([
       rules.mobile({
         locale: ['pt-BR', 'en-IN', 'en-US']
@@ -45,6 +45,7 @@ export default class CreateUserValidator {
    */
   public messages: CustomMessages = {
     'user.phone_number.required': 'Missing value for phone number',
+   
 
   }
 }

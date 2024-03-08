@@ -8,6 +8,7 @@ interface UserDocument extends Document {
     otp: number;
     roles: string;
     expiration_time:Date
+    is_verified: boolean
 }
 
 // Define the schema for the user document
@@ -15,6 +16,7 @@ const userSchema: Schema<UserDocument> = new Schema({
     phone_number: Number,
     otp: Number,
     roles: { type: String, default: 'user' },
+    is_verified: { type: Boolean, default: false },
     expiration_time:Date
 });
 

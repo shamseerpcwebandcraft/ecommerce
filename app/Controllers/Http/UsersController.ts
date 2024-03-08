@@ -6,6 +6,7 @@
  import UserLoginValidator from 'App/Validators/UserLoginValidator'
  import userRepository from 'App/Repositories/userRepository'
 import { makeJsonResponse,APIResponse } from 'App/utils/JsonResponse'
+import UnAuthorized from 'App/Exceptions/UnAuthorizedException'
 
 export default class UsersController {
     private userRepository: userRepository
@@ -15,6 +16,10 @@ export default class UsersController {
       }
 
    public async sendotp(ctx:HttpContextContract){
+    // const message = 'application blocked'
+    // const status = 403
+    
+    // throw new UnAuthorized(message, status)
 
     let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
     let isSuccess: boolean = false
@@ -22,15 +27,15 @@ export default class UsersController {
     let response: APIResponse
     
 
-    let { phone_number} = await ctx.request.validate(CreateUserValidator)
+    let { phone_number } = await ctx.request.validate(CreateUserValidator)
+
 
     const otpVerificationResponse = await this.userRepository.sendotp(phone_number)
-    console.log(otpVerificationResponse,"otpVerificationResponse");
 
     if(otpVerificationResponse==false){
 
       response = makeJsonResponse('your mobile is already entered', {}, {}, httpStatusCode)
-      console.log(response)
+
     }
 
     if (!otpVerificationResponse) {
@@ -63,15 +68,14 @@ public async verifyotp(ctx:HttpContextContract){
 
     const otpVerificationResponse = await this.userRepository.verifyOtp(otp,phone_number)
 
-    if(otpVerificationResponse.error){
-      response = makeJsonResponse(otpVerificationResponse.error, {}, {}, httpStatusCode)
-      ctx.response.status(httpStatusCode).json({response})
-    }
-    
+    // if(otpVerificationResponse.error){
+    //   response = makeJsonResponse(otpVerificationResponse.error, {}, {}, httpStatusCode)
+    //   ctx.response.status(httpStatusCode).json({response})
+    // }   
 
     if (!otpVerificationResponse) {
       response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-    } else if(!otpVerificationResponse.error) {
+    } else  {
         httpStatusCode = HttpStatusCodes.HTTP_OK;
         isSuccess = true;
         response = makeJsonResponse(
@@ -81,10 +85,11 @@ public async verifyotp(ctx:HttpContextContract){
           httpStatusCode,
           isSuccess
         );
-        ctx.response.status(httpStatusCode).json(response)
+      
        
 
    }
+   ctx.response.status(httpStatusCode).json(response)
   
 
 }
@@ -97,15 +102,10 @@ public async login(ctx:HttpContextContract){
   let { otp,phone_number} = await ctx.request.validate(UserLoginValidator)
 
   const otpVerificationResponse = await this.userRepository.login(otp,phone_number)
-  if(otpVerificationResponse.error){
-    console.log("nayint");
-    response = otpVerificationResponse.error
-    ctx.response.status(httpStatusCode).json({response})
-  }
 
   if (!otpVerificationResponse) {
     response = makeJsonResponse('Invalid credentials', {}, {}, httpStatusCode)
-  } else if(!otpVerificationResponse.error) {
+  } else {
       httpStatusCode = HttpStatusCodes.HTTP_OK;
       isSuccess = true;
       response = makeJsonResponse(
@@ -115,10 +115,11 @@ public async login(ctx:HttpContextContract){
         httpStatusCode,
         isSuccess
       );
-  ctx.response.status(httpStatusCode).json(response)
+
      
 
  }
+ ctx.response.status(httpStatusCode).json(response)
 
 }
 
