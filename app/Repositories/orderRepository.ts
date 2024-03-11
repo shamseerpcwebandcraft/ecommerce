@@ -10,7 +10,7 @@ export default class orderRepository {
 
     public async getDelivaryAgentOrders(user_id, role, page_no, page_size, filters): Promise<any> {
 
-        // throw new UnAuthorizedException("invalid",400)
+         throw new UnAuthorizedException("invalid",400)
         try {
 
 
@@ -30,7 +30,7 @@ export default class orderRepository {
               query.delivered_status = filters;
           }
   
-          let orders = Order.find(query)
+          let orders = await Order.find(query)
                                  .skip(offset) 
                                  .limit(pageSize) 
                                  .sort({ createdAt: -1 }); 
