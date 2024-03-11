@@ -6,17 +6,21 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 interface UserDocument extends Document {
     phone_number: number;
     otp: number;
-    roles: string;
+    role: string;
     expiration_time:Date
-    is_verified: boolean
+    is_verified: boolean;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 // Define the schema for the user document
 const userSchema: Schema<UserDocument> = new Schema({
     phone_number: Number,
     otp: Number,
-    roles: { type: String, default: 'user' },
+    role: { type: String, default: 'user' },
     is_verified: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
     expiration_time:Date
 });
 

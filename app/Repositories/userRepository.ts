@@ -14,7 +14,8 @@ export default class userRepository {
 
 
   
-    public async sendotp(phone_number): Promise<any> {
+    public async sendotp(phone_number,role): Promise<any> {
+      console.log(phone_number,role)
     
       const otp = Math.floor(100000 + Math.random() * 900000)
 
@@ -31,11 +32,13 @@ export default class userRepository {
       //console.log("isVerified",isVerified)
 
 
+
       if (!isUserExist&&serviceResponse) {
 
 
           await User.create(
-            { phone_number: phone_number, 
+            { phone_number: phone_number,
+              role:role, 
              otp: otp,
              expiration_time:expiration_time,
              is_verified:false,
@@ -63,16 +66,19 @@ export default class userRepository {
           //const expirationTimeISO = isUserExist.expiration_time.toISOString();
      
           if (DateTime.fromJSDate(isUserExist.expiration_time) > DateTime.now()) {
-                 
-        
+            console.log("success date ")
+                 console.log(isUserExist.otp)
+                 console.log(otp)
               if (isUserExist.otp == otp) {
-
+                       console.log("success otp")
                      await User.updateOne(
                     { phone_number: phone_number },
                     { otp: otp, is_verified: true } 
                   );
+                  console.log("isUserExist.role",isUserExist.role)
                   const payload={
-                    user_id: isUserExist.id
+                    user_id: isUserExist.id,
+                    role:isUserExist.role
                   }
                   const token = jwt.sign(payload, Env.get('JWT_SECRET'), { expiresIn: '5d' });
 

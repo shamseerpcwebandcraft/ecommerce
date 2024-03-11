@@ -195,7 +195,7 @@ export default class productRepository {
       try {
 
         const user=await User.findOne({_id:user_id})
-        const roles=user?.roles
+        const roles=user?.role
         
         // Find the order by its ID
         const order = await Order.findById(order_id);
@@ -221,6 +221,38 @@ export default class productRepository {
         // Handle any errors that occur during the process
         return error;
       }
+    }
+
+    public async getDelivaryAgentOrders(user_id, role, page_no, page_size, filters): Promise<any> {
+      try {
+        
+        const pageNo: number = page_no || 1;
+        const pageSize: number = page_size || 10;
+
+        const offset: number = (pageNo - 1) * pageSize;
+
+
+        const user: any = await User.findOne({ _id: user_id });
+
+        let query: any = {};
+
+    
+        if (user && filters) {
+            query.delivered_status = filters;
+        }
+
+        let orders = Order.find(query)
+                               .skip(offset) 
+                               .limit(pageSize) 
+                               .sort({ createdAt: -1 }); 
+
+    
+
+        return orders;
+    } catch (error) {
+        // Handle errors gracefully
+        return error;
+    }
     }
     
 

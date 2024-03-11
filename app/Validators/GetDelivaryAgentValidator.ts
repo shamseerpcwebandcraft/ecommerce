@@ -1,7 +1,7 @@
-import { schema, CustomMessages,rules } from '@ioc:Adonis/Core/Validator'
+import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class CreateUserValidator {
+export default class GetDelivaryAgentValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,13 +24,9 @@ export default class CreateUserValidator {
    *    ```
    */
   public schema = schema.create({
-
-    phone_number: schema.string([
-      rules.mobile({
-        locale: ['pt-BR', 'en-IN', 'en-US']
-      })
-    ]),
-    role:schema.string.optional()
+    page_no:schema.number.optional(),
+    page_size:schema.number.optional(),
+    filters:schema.string.optional()
   })
 
   /**
@@ -44,9 +40,5 @@ export default class CreateUserValidator {
    * }
    *
    */
-  public messages: CustomMessages = {
-    'user.phone_number.required': 'Missing value for phone number',
-   
-
-  }
+  public messages: CustomMessages = {}
 }

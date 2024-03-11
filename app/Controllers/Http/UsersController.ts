@@ -27,10 +27,10 @@ export default class UsersController {
     let response: APIResponse
     
 
-    let { phone_number } = await ctx.request.validate(CreateUserValidator)
+    let { phone_number,role } = await ctx.request.validate(CreateUserValidator)
 
 
-    const otpVerificationResponse = await this.userRepository.sendotp(phone_number)
+    const otpVerificationResponse = await this.userRepository.sendotp(phone_number,role)
 
     if(otpVerificationResponse==false){
 
@@ -67,6 +67,7 @@ public async verifyotp(ctx:HttpContextContract){
     let { otp,phone_number} = await ctx.request.validate(VerifyOtpValidator)
 
     const otpVerificationResponse = await this.userRepository.verifyOtp(otp,phone_number)
+    console.log(otpVerificationResponse)
 
     // if(otpVerificationResponse.error){
     //   response = makeJsonResponse(otpVerificationResponse.error, {}, {}, httpStatusCode)
