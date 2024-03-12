@@ -16,6 +16,8 @@ import { makeJsonResponse } from 'App/utils/JsonResponse';
 */
 export default class UnAuthorizedException extends Exception {
     public async handle(error: this, ctx: HttpContextContract) {
+      console.log("error.message==",error.message)
+      console.log("error==",error)
       let response=makeJsonResponse(error.message, {}, error,error.status)
       return ctx.response.status(error.status).json(response);
       }

@@ -2,7 +2,7 @@ import mongoose, { Schema, Document, Model } from 'mongoose';
 
 // Define the interface for the user document
 interface OrdersDocument extends Document {
-    user_id: number;
+    user_id: string;
     items: any[]; // Or specify a more specific type for items
     total_price: number;
     user_details: object;
@@ -17,7 +17,7 @@ interface OrdersDocument extends Document {
 
 // Define the schema for the user document
 const ordersSchema: Schema<OrdersDocument> = new Schema({
-    user_id: Number,
+    user_id: String,
     items: Array,
     total_price: Number,
     user_details: Object,

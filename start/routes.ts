@@ -28,27 +28,34 @@ Route.post('/auth/signup', async () => {
   return { hello: 'world' }
 })
 
-
-Route.post("/product", "ProductsController.addproduct");
+Route.group(()=>{
+  Route.post("/product", "ProductsController.addproduct");
 Route.get("/product", "ProductsController.listproduct");
 Route.post("/cart", "ProductsController.addToCart").middleware('auth')
 Route.get("/cart", "ProductsController.getCart").middleware('auth')
 Route.post("/cart/update", "ProductsController.updateCart").middleware('auth')
 Route.post("/checkout", "ProductsController.checkout").middleware('auth')
+Route.get("/get-order", "OrdersController.getOrder").middleware('auth')
+}).prefix('/user')
+
 
 Route.group(()=>{
-  Route.post("/auth/sendotp", "UsersController.sendotp");
+  Route.post("/sendotp", "UsersController.sendotp");
   // Route.post("/auth/verifyotp", "UsersController.verifyotp");
-  Route.post("/auth/verifyotp", "UsersController.verifyotp");
-  Route.post("/auth/login", "UsersController.login");
+  Route.post("/verifyotp", "UsersController.verifyotp");
+  Route.post("/login", "UsersController.login");
 }).prefix('/auth')
 
 
 Route.group(()=>{
-  Route.post("/:orderId", "ProductsController.markDelivered").middleware('auth')
+  Route.post("/:orderId", "ProductsController.markDelivered").middleware('DelivaryAgentAuth')
 Route.get("/orders", "OrdersController.getDeliveryOrders").middleware('DelivaryAgentAuth')
   
-}).prefix('/DELIVERY-AGENT')
+}).prefix('/delivary-agent')
+
+Route.group(()=>{
+  Route.post("/razorpay-payment-initiation", "PaymentsController.razorpayPaymentIntitation").middleware('auth')
+}).prefix('/payment')
 
 
 

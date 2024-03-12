@@ -152,6 +152,7 @@ export default class productRepository {
           const payable_price = (cart?.total_price ?? 0) + shipping_charge;
          
          const order=await Order.create({
+          user_id:user_id,
           items:cart?.items,
           user_details:user_details,
           shipping_address:shipping_address,

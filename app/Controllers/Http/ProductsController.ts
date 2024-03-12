@@ -6,7 +6,6 @@ import UserCartValidator from 'App/Validators/UserCartValidator'
 import UserCheckoutValidator from 'App/Validators/UserCheckoutValidator'
 import UserCartUpdateValidator from 'App/Validators/UserCartUpdateValidator'
 import DelivaryAgentValidator from 'App/Validators/DelivaryAgentValidator'
-import getDelivaryAgentValidator from 'App/Validators/GetDelivaryAgentValidator'
 
 export default class ProductsController {
     private productRepository: productRepository
@@ -252,6 +251,8 @@ export default class ProductsController {
    }
   
   }
+
+
 
 
  

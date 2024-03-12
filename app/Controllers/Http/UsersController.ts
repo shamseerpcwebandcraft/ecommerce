@@ -6,7 +6,6 @@
  import UserLoginValidator from 'App/Validators/UserLoginValidator'
  import userRepository from 'App/Repositories/userRepository'
 import { makeJsonResponse,APIResponse } from 'App/utils/JsonResponse'
-import UnAuthorized from 'App/Exceptions/UnAuthorizedException'
 
 export default class UsersController {
     private userRepository: userRepository

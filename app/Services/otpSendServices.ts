@@ -12,7 +12,7 @@ export default class otpSendService {
 
       public async sendOtp(otp:number,phone_number:number){
     try {
-        let response = { otp: otp };
+        // let response = { otp: otp };
         if(Env.get('NODE_ENV') === 'development'){
             return true
         }else{
