@@ -11,11 +11,14 @@ import Env from '@ioc:Adonis/Core/Env'
 
 export default class RazorpayService {
     public async createOrder(amount){
+      
+
+      try {
+        
+      
         // let amount=Order.payable_price
             let keyId=Env.get("RAZORPAY_KEY_ID")
-            console.log(keyId)
             let keysecret=Env.get("RAZORPAY_KEY_SECRET")
-            console.log(keysecret)
 
            var instance=new Razorpay({
         key_id:keyId,
@@ -28,13 +31,24 @@ export default class RazorpayService {
         receipt: "order_rcptid_11"
       };
 
-      instance.orders.create(options, function(err, order) {
-        console.log(order);
+      const myPromise = new Promise((resolve, reject) => {
+         instance.orders.create(options, function(err, order) {
         if(err){
-            console.log(err)
-        }
-        return order
-      })
+           reject(err)
+
+        }else{
+           resolve(order)
+         
+      }})
+    });
+    
+    return myPromise
+  }
+
+      // return response
+
+  }catch (error) {
+        return error
     }
     
-}
+  }

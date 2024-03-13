@@ -19,7 +19,8 @@
   "providers": [
     "./providers/AppProvider",
     "@adonisjs/core",
-    "./providers/MongoDbProvider"
+    "./providers/MongoDbProvider",
+    "@adonisjs/view"
   ],
   "aceProviders": [
     "@adonisjs/repl"
@@ -37,5 +38,11 @@
   },
   "testProviders": [
     "@japa/preset-adonis/TestsProvider"
+  ],
+  "metaFiles": [
+    {
+      "pattern": "resources/views/**/*.edge",
+      "reloadServer": false
+    }
   ]
 }

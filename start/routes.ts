@@ -55,6 +55,11 @@ Route.get("/orders", "OrdersController.getDeliveryOrders").middleware('DelivaryA
 
 Route.group(()=>{
   Route.post("/razorpay-payment-initiation", "PaymentsController.razorpayPaymentIntitation").middleware('auth')
+  Route.get('/', async ({ view }) => {
+    const html = await view.render('razorpay_pay_button', {})
+    
+    return html
+  })
 }).prefix('/payment')
 
 

@@ -23,6 +23,7 @@
   "dependencies": {
     "@adonisjs/core": "^5.9.0",
     "@adonisjs/repl": "^3.1.11",
+    "@adonisjs/view": "^6.2.0",
     "@types/jsonwebtoken": "^9.0.6",
     "axios": "^1.6.7",
     "jsonwebtoken": "^9.0.2",

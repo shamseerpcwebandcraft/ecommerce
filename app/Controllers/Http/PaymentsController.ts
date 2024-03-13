@@ -1,9 +1,8 @@
  import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import { HttpStatusCodes } from 'App/utils/HttpStatuses'
 import { APIResponse, makeJsonResponse } from 'App/utils/JsonResponse'
-import {razorpayPymentGatewayValidator} from 'App/Validators/RazorpayPymentGatewayValidator'
 import paymentRepository from 'App/Repositories/paymentRepository'
- import Razorpay from 'razorpay'
+
 
 export default class PaymentsController {
     private paymentRepository: paymentRepository
@@ -18,6 +17,7 @@ export default class PaymentsController {
     let isSuccess: boolean = false
     let response: APIResponse
      const user_id= ctx.request.user.userId
+     console.log("user_id==",user_id)
     // const role= ctx.request.user.role
   
     //let { amount } = await ctx.request.validate(razorpayPymentGatewayValidator)
