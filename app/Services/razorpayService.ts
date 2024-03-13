@@ -47,8 +47,23 @@ export default class RazorpayService {
 
       // return response
 
-  }catch (error) {
+  catch (error) {
+        return error
+    }
+  }
+
+    //webhookResponse
+
+    public async webhookResponse(){
+      
+
+      try {
+        
+       
+
+      }catch (error) {
         return error
     }
     
   }
+}

@@ -55,6 +55,7 @@ Route.get("/orders", "OrdersController.getDeliveryOrders").middleware('DelivaryA
 
 Route.group(()=>{
   Route.post("/razorpay-payment-initiation", "PaymentsController.razorpayPaymentIntitation").middleware('auth')
+  Route.post("/razorpay/webhook", "PaymentsController.razorpayWebhookResponse")
   Route.get('/', async ({ view }) => {
     const html = await view.render('razorpay_pay_button', {})
     

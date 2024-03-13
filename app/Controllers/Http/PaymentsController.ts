@@ -45,6 +45,42 @@ export default class PaymentsController {
 
     }
 
+    public async razorpayWebhookResponse(ctx:HttpContextContract){
+
+
+      let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
+      let isSuccess: boolean = false
+      let response: APIResponse
+   
+        const payload=ctx.request.body()
+        console.log("payload==",payload)
+      // const role= ctx.request.user.role
+    
+      //let { amount } = await ctx.request.validate(razorpayPymentGatewayValidator)
+      const razorpayPaymentResponse = await this.paymentRepository.razorpayPaymentResponse(payload)
+    
+      if (!razorpayPaymentResponse) {
+        response = makeJsonResponse('webhook is not available', {}, {}, httpStatusCode)
+      } else {
+          httpStatusCode = HttpStatusCodes.HTTP_OK;
+          isSuccess = true;
+          response = makeJsonResponse(
+            "webhook invoked",
+            razorpayPaymentResponse,
+            {},
+            httpStatusCode,
+            isSuccess
+          );
+  
+         
+    
+     }
+     ctx.response.status(httpStatusCode).json(response)
+  
+  
+  
+      }
+
     
     
 }
