@@ -12,7 +12,7 @@ export default class paymentRepository {
            
     public async razorpayPaymentIntitation(user_id): Promise<any> {
 
-      let order:any=await Order.findOne({user_id:user_id})
+      let order:any=await Order.findOne({user_id:user_id}).sort({createdAt:-1})
  
       let amount=order.payable_price
       console.log("amount==",amount)
@@ -31,26 +31,33 @@ export default class paymentRepository {
     public async razorpayPaymentResponse(webhookpayload): Promise<any> {
       const event_type= webhookpayload.event
       console.log(event_type)
-      let paymentstatus:any;
+      let paymentstatus;
          if(event_type=="payment.captured"){
-             paymentstatus="success"
+             paymentstatus="completed"
 
-         }else if(event_type=="payment.captured"){
-           
+         }else if(event_type=="payment.authorized"){
+               paymentstatus="pending"
          }
+         const data=JSON.stringify(webhookpayload)
+         const orderId = parsedData.payload.payment.entity.order_id;
+         const parsedData = JSON.parse(data);
+         console.log(parsedData);
 
-         const order= await Order.updateOne({
-          payment_status:paymentstatus
-        })
+         const order = await Order.findOne().sort({createdAt: -1});
+         if (order) {
+             order.payment_status = paymentstatus; 
+             try {
+                 await order.save(); 
+                 return order; 
+             } catch (err) {
+                 return err; 
+             }
+         } else {
+             return "No order found"; 
+         }
+         
+            
 
-  
-      const razorpayService=new RazorpayService()
-
-      const response= await razorpayService.webhookResponse()
-
-      if(response){
-        return response
-      }
        
     }
 

@@ -53,7 +53,7 @@ export default class PaymentsController {
       let response: APIResponse
    
         const payload=ctx.request.body()
-        console.log("payload==",payload)
+       // console.log("payload==",JSON.stringify(payload))
       // const role= ctx.request.user.role
     
       //let { amount } = await ctx.request.validate(razorpayPymentGatewayValidator)

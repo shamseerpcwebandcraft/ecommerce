@@ -13,6 +13,8 @@ interface OrdersDocument extends Document {
     delivered_status: string;
     shipping_charge: number;
     payable_price: number;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 // Define the schema for the user document
@@ -27,7 +29,9 @@ const ordersSchema: Schema<OrdersDocument> = new Schema({
     shipping_address: Object,
     delivered_status: String,
     shipping_charge: Number,
-    payable_price: Number
+    payable_price: Number,
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now },
 });
 
 // Define the model for the user document

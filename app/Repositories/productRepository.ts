@@ -45,21 +45,19 @@ export default class productRepository {
     public async addToCart(items, user_id): Promise<any> {
       try {
 
-        const existingCart = await Cart.findOne({ user_id: user_id });
+        const cart = await Cart.findOne({ user_id: user_id }).sort({createdAt:-1})
 
-        if(existingCart){
-          return { error: 'user is already added cart' } 
-        }
     
         let total_price = 0; 
     
         for (const { id, quantity } of items) {
-
+             
   
-          const product = await Product.findOne({ _id: id });
+          const product:any = await Product.findById(id)
+
     
           //quantity is lessthan the stock
-          if (product?.stock !== undefined && product.stock >= quantity ) {
+          if ( product.stock >= quantity ) {
             const price = product.price;
             total_price += price * quantity;
         } else {
