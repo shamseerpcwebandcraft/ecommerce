@@ -31,12 +31,17 @@ export default class paymentRepository {
     public async razorpayPaymentResponse(webhookpayload): Promise<any> {
       const event_type= webhookpayload.event
       console.log(event_type)
+      let paymentstatus:any;
          if(event_type=="payment.captured"){
-          const order= await Order.updateOne
+             paymentstatus="success"
 
          }else if(event_type=="payment.captured"){
-
+           
          }
+
+         const order= await Order.updateOne({
+          payment_status:paymentstatus
+        })
 
   
       const razorpayService=new RazorpayService()

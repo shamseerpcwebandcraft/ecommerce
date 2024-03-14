@@ -144,8 +144,8 @@ export default class productRepository {
 
          const shipping_charge=40
          
-         const payment_status = true
-         const delivered_status="delivered";
+         const payment_status = "pending"
+         const delivered_status="pending";
          const payment_mode="online";
 
          if(cart){
@@ -163,6 +163,7 @@ export default class productRepository {
           payment_mode:payment_mode
          })
          if(order){
+          await Cart.deleteOne({user_id:user_id})
           return order
          }else{
           return {error:"this order is not ready "}
