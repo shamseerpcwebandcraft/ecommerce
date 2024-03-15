@@ -52,7 +52,7 @@ export default class OrdersController {
       
         //let { items } = await ctx.request.validate(UserCartValidator)
         const getUserOrderResponse = await this.orderRepository.getOrder( user_id )
-        console.log("getUserOrderResponse",getUserOrderResponse)
+
       
         if (!getUserOrderResponse) {
           response = makeJsonResponse('order is not available', {}, {}, httpStatusCode)

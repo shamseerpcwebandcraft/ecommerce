@@ -57,7 +57,6 @@ export default class orderRepository {
                     items: 1,
                     payment_status: 1,
                     payment_mode: 1,
-                    delivered_status: 1,
                     shipping_charge: 1,
                     payable_price: 1
                 });
