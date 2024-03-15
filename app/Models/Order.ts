@@ -29,7 +29,7 @@ const ordersSchema: Schema<OrdersDocument> = new Schema({
     payment_status: String,
     payment_mode: String,
     shipping_address: Object,
-    delivered_status: String,
+    delivered_status: { type: String, default: "pending" },
     shipping_charge: Number,
     payable_price: Number,
     createdAt: { type: Date, default: Date.now },

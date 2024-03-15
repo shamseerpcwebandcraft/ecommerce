@@ -33,8 +33,8 @@ export default class paymentRepository {
 
 
     public async razorpayPaymentResponse(webhookpayload): Promise<any> {
+
       const event_type= webhookpayload.event
-      console.log("event_type",event_type)
       let paymentstatus;
          if(event_type=="payment.captured"){
              paymentstatus="completed"
@@ -42,11 +42,8 @@ export default class paymentRepository {
          }else if(event_type=="payment.authorized"){
                paymentstatus="pending"
          }
-         const data = JSON.stringify(webhookpayload);
-         const parsedData = JSON.parse(data);
-         const orderId = parsedData.payload.payment.entity.order_id;
-         console.log(parsedData);
-         console.log("orderId==kkoi",orderId)
+
+         const orderId = webhookpayload.payload.payment.entity.order_id;
          
 
          const order = await Order.findOne({paymentgatewayorder_id:orderId})

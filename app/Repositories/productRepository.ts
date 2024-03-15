@@ -143,7 +143,6 @@ export default class productRepository {
          const shipping_charge=40
          
          const payment_status = "pending"
-         const delivered_status="pending";
          const payment_mode="online";
 
          if(cart){
@@ -157,7 +156,6 @@ export default class productRepository {
           shipping_charge:shipping_charge,
           payable_price:payable_price,
           payment_status:payment_status,
-          delivered_status:delivered_status,
           payment_mode:payment_mode
          })
          if(order){

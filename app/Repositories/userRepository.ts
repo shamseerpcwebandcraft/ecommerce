@@ -15,7 +15,7 @@ export default class userRepository {
 
   
     public async sendotp(phone_number,role): Promise<any> {
-      console.log(phone_number,role)
+
     
       const otp = Math.floor(100000 + Math.random() * 900000)
 
@@ -59,6 +59,7 @@ export default class userRepository {
       try{
 
         const isUserExist = await User.findOne({ phone_number: phone_number });
+
  
 
         if (isUserExist && isUserExist.expiration_time) {
