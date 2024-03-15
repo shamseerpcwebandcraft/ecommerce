@@ -23,6 +23,10 @@ export default class paymentRepository {
     const response= await razorpayService.createOrder(amount)
      console.log("response==",response)
 
+     let orderId=response.id
+         order.order_id=orderId
+         order.save()
+
        return response
        
     }
@@ -30,7 +34,7 @@ export default class paymentRepository {
 
     public async razorpayPaymentResponse(webhookpayload): Promise<any> {
       const event_type= webhookpayload.event
-      console.log(event_type)
+      console.log("event_type",event_type)
       let paymentstatus;
          if(event_type=="payment.captured"){
              paymentstatus="completed"
@@ -38,20 +42,18 @@ export default class paymentRepository {
          }else if(event_type=="payment.authorized"){
                paymentstatus="pending"
          }
-         const data=JSON.stringify(webhookpayload)
-         const orderId = parsedData.payload.payment.entity.order_id;
+         const data = JSON.stringify(webhookpayload);
          const parsedData = JSON.parse(data);
+         const orderId = parsedData.payload.payment.entity.order_id;
          console.log(parsedData);
+         console.log("orderId==kkoi",orderId)
+         
 
-         const order = await Order.findOne().sort({createdAt: -1});
+         const order = await Order.findOne({paymentgatewayorder_id:orderId})
          if (order) {
              order.payment_status = paymentstatus; 
-             try {
                  await order.save(); 
                  return order; 
-             } catch (err) {
-                 return err; 
-             }
          } else {
              return "No order found"; 
          }

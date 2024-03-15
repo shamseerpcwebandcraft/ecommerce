@@ -6,6 +6,7 @@ interface OrdersDocument extends Document {
     items: any[]; // Or specify a more specific type for items
     total_price: number;
     user_details: object;
+    paymentgatewayorder_id:string;
     delete_status: boolean;
     payment_status: string;
     payment_mode: string; // Corrected field name
@@ -20,6 +21,7 @@ interface OrdersDocument extends Document {
 // Define the schema for the user document
 const ordersSchema: Schema<OrdersDocument> = new Schema({
     user_id: String,
+    paymentgatewayorder_id:String,
     items: Array,
     total_price: Number,
     user_details: Object,
