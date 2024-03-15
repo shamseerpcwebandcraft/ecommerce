@@ -45,7 +45,7 @@ export default class productRepository {
     public async addToCart(items, user_id): Promise<any> {
       try {
 
-        const cart = await Cart.findOne({ user_id: user_id }).sort({createdAt:-1})
+        // const cart = await Cart.findOne({ user_id: user_id }).sort({createdAt:-1})
 
     
         let total_price = 0; 
