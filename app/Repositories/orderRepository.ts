@@ -14,7 +14,10 @@ export default class orderRepository {
         //  throw new UnAuthorizedException("invalid",400)
         try {
 
+            // const isDelivaryAgentExist = await User.findById(user_id);
 
+                     
+            
           
           const pageNo: number = page_no || 1;
           const pageSize: number = page_size || 10;
@@ -39,11 +42,11 @@ export default class orderRepository {
       
   
           return orders;
-      } catch (error) {
-          // Handle errors gracefully
-          return error;
-      }
-      }
+      }catch (error) {
+        // Handle errors gracefully
+        return error;
+    }
+}
 
 
       public async getOrder(user_id): Promise<any> {

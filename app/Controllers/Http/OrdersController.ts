@@ -17,11 +17,12 @@ export default class OrdersController {
         let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
         let isSuccess: boolean = false
         let response: APIResponse
-        // const user_id= ctx.request.user.userId
+        //  const user_id= ctx.request.user.userId
         // const role= ctx.request.user.role
       
         let { page_no,page_size,filters } = await ctx.request.validate(getDelivaryAgentValidator)
         const getDelivaryAgentOrdersResponse = await this.orderRepository.getDelivaryAgentOrders(  page_no, page_size, filters )
+        console.log("getDelivaryAgentOrdersResponse==",getDelivaryAgentOrdersResponse)
       
         if (!getDelivaryAgentOrdersResponse) {
           response = makeJsonResponse('order is not available', {}, {}, httpStatusCode)

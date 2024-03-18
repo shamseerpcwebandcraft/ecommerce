@@ -1,5 +1,6 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 import jwt from 'jsonwebtoken';
+import { makeJsonResponse, type APIResponse } from 'App/utils/JsonResponse'
 import Env from '@ioc:Adonis/Core/Env'
 
 export default class DelivaryAgentAuth {
@@ -9,8 +10,13 @@ export default class DelivaryAgentAuth {
 
     const  token=ctx.request.header('authorization')?.replace('Bearer ', '');
 
+    let httpStatusCode = 401
+    let httpErrorResponse: APIResponse
+
     if (!token) {
-      return ctx.response.unauthorized({ error: 'Must be logged in' })
+      // return ctx.response.unauthorized({ error: 'Must be logged in' })
+      httpErrorResponse = makeJsonResponse('must be Logged In', {}, {}, httpStatusCode)
+      return ctx.response.unauthorized(httpErrorResponse)
     }
     
     const publicKey: any = Env.get('JWT_SECRET')
@@ -24,12 +30,24 @@ export default class DelivaryAgentAuth {
       if(role=="delivary-agent"){
       ctx.request.user={userId:userId}
       }else{
-        return ctx.response.unauthorized({ status: 422, error: 'You are not authorized to access this route' })
+        httpErrorResponse = makeJsonResponse('invalid token', {}, {}, httpStatusCode)
+        return ctx.response.unauthorized(httpErrorResponse)
       }
     } catch(err) {
       console.log(err)
-      // err
+      if(err.name="JsonWebTokenError"){
+        httpErrorResponse = makeJsonResponse('Invalid user token', {}, {}, httpStatusCode)
+        return ctx.response.unauthorized(httpErrorResponse)
+      }else if( err.name == 'NotBeforeError' ||
+      err.name == 'TokenExpiredError'
+    ){
+      httpErrorResponse = makeJsonResponse('invalid token', {}, {}, 403)
+      return ctx.response.unauthorized(httpErrorResponse)  
     }
+          
+
+      }
+      // err}
     // ctx.request.user=decoded.user_id
 
     await next()

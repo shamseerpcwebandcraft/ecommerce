@@ -194,6 +194,7 @@ export default class productRepository {
 
         const user=await User.findOne({_id:user_id})
         const roles=user?.role
+        console.log("roles==",roles)
         
         // Find the order by its ID
         const order = await Order.findById(order_id);
@@ -202,7 +203,7 @@ export default class productRepository {
           // If the order doesn't exist, return an error
           return { error: 'Order not found' };
         }
-        if(roles=='delivary_agent'){
+        if(roles=='delivary-agent'){
         // Update the delivered_status of the order to 'delivered'
         order.delivered_status = delivered_status;
         
@@ -212,12 +213,10 @@ export default class productRepository {
         
         // Return a response indicating success
         return { message: 'delivary agent change the status' };
-        }else{
-          return { message: 'you cant access to change the delivary status' };
-        }
+        }else return false
       } catch (error) {
         // Handle any errors that occur during the process
-        return error;
+        return false
       }
     }
 

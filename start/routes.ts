@@ -54,6 +54,11 @@ Route.get("/orders", "OrdersController.getDeliveryOrders").middleware('DelivaryA
 }).prefix('/delivary-agent')
 
 Route.group(()=>{
+  Route.post("/otp-sending", "EmailsController.otpSendEmail").middleware('auth')
+  Route.post("/order-success", "EmailsController.orderSuccessEmail").middleware('auth')
+}).prefix('/email')
+
+Route.group(()=>{
   Route.post("/razorpay-payment-initiation", "PaymentsController.razorpayPaymentIntitation").middleware('auth')
   Route.post("/razorpay/webhook", "PaymentsController.razorpayWebhookResponse")
   Route.get('/', async ({ view }) => {
