@@ -68,6 +68,15 @@ Route.group(()=>{
   })
 }).prefix('/payment')
 
+Route.group(()=>{
+    Route.get("/products","AdminsController.listProduct").middleware('admin')
+    Route.post("/products","AdminsController.updateProduct").middleware('admin')
+    Route.get("/orders","AdminsController.listOrders").middleware('admin')
+    Route.post("/orders","AdminsController.updateOrdersStatus").middleware('admin')
+    Route.get("/sales-list","AdminsController.salesList").middleware('admin')
+    Route.get("/dashboard","AdminsController.adminDashboard").middleware('admin')
+}).prefix('/admin')
+
 
 
 

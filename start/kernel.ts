@@ -43,5 +43,6 @@ Server.middleware.register([
 */
 Server.middleware.registerNamed({
   auth: () => import('App/Middleware/Auth'),
-  DelivaryAgentAuth: () => import('App/Middleware/DelivaryAgentAuth')
+  DelivaryAgentAuth: () => import('App/Middleware/DelivaryAgentAuth'),
+  admin: () => import('App/Middleware/Admin'),
 })
