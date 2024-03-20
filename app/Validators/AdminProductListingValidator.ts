@@ -25,9 +25,7 @@ export default class AdminProductListingValidator {
    */
   public schema = schema.create({
     page_no:schema.number.optional(),
-    page_size:schema.number.optional(),
-    start_date:schema.date.optional(),
-    end_date:schema.date.optional()
+    page_size:schema.number.optional()
   })
 
   /**

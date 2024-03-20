@@ -25,7 +25,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     '500..599': 'errors/server-error',
   }
   constructor () {
-    console.log("heloo medam")
+
     console.log("heloooooo");
     super(Logger)
   }
@@ -39,7 +39,8 @@ public async handle(error: any, ctx: HttpContextContract) {
    */
   if (error.code === 'E_VALIDATION_FAILURE') {
 
-    let response=makeJsonResponse('check the data entered', {}, error.messages.errors,error.status)
+    let response=makeJsonResponse('check the data entered', {}, error.messages.errors[0].message,error.status)
+    console.log()
   //makeJsonResponse()
     return ctx.response.status(422).json(response);
 

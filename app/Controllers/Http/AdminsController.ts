@@ -5,6 +5,9 @@ import adminRepository from 'App/Repositories/adminRepository'
 import AdminProductListingValidator from 'App/Validators/AdminProductListingValidator'
 import AdminProductUpdateValidator from 'App/Validators/AdminProductUpdateValidator'
 import AdminOrderStatusValidator from 'App/Validators/AdminOrderStatusValidator'
+import AdminOrderListingValidator from 'App/Validators/AdminOrderListingValidator'
+import SalesListingValidator from 'App/Validators/SalesListingValidator'
+
 
 export default class AdminsController {
     private adminRepository: adminRepository
@@ -19,9 +22,9 @@ export default class AdminsController {
         let isSuccess: boolean = false
         let response: APIResponse
 
-        let { page_no,page_size,start_date,end_date } = await ctx.request.validate(AdminProductListingValidator)
+        let { page_no,page_size } = await ctx.request.validate(AdminProductListingValidator)
       
-        const productListingResponse = await this.adminRepository.listProducts(page_no,page_size,filters,start_date,end_date)
+        const productListingResponse = await this.adminRepository.listProducts(page_no,page_size)
       
         if (!productListingResponse) {
           response = makeJsonResponse('no products available', {}, {}, httpStatusCode)
@@ -77,7 +80,7 @@ export default class AdminsController {
         let isSuccess: boolean = false
         let response: APIResponse
 
-        let { page_no,page_size,start_date,end_date } = await ctx.request.validate(AdminProductListingValidator)
+        let { page_no,page_size,start_date,end_date } = await ctx.request.validate(AdminOrderListingValidator)
       
         const ordersListingResponse = await this.adminRepository.listOrders(page_no,page_size,start_date,end_date)
       
@@ -105,7 +108,7 @@ export default class AdminsController {
         let isSuccess: boolean = false
         let response: APIResponse
         let order_id=ctx.request.qs().order_id
-        console.log("id==",order_id)
+
 
         let { delivared_status } = await ctx.request.validate(AdminOrderStatusValidator)
 
@@ -136,7 +139,7 @@ export default class AdminsController {
         let isSuccess: boolean = false
         let response: APIResponse
 
-        let { page_no,page_size,start_date,end_date } = await ctx.request.validate(AdminProductListingValidator)
+        let { page_no,page_size,start_date,end_date } = await ctx.request.validate(SalesListingValidator)
       
         const salesListingResponse = await this.adminRepository.salesListing(page_no,page_size,start_date,end_date)
       

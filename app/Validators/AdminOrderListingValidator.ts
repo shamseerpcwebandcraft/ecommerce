@@ -1,7 +1,7 @@
 import { schema, CustomMessages } from '@ioc:Adonis/Core/Validator'
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
 
-export default class AdminProductUpdateValidator {
+export default class AdminOrderListingValidator {
   constructor(protected ctx: HttpContextContract) {}
 
   /*
@@ -24,9 +24,11 @@ export default class AdminProductUpdateValidator {
    *    ```
    */
   public schema = schema.create({
-    stock:schema.number.optional(),
-    price:schema.number.optional(),
-    is_active:schema.boolean.optional()
+    page_no:schema.number.optional(),
+    page_size:schema.number.optional(),
+    start_date:schema.date.optional(),
+    end_date:schema.date.optional()
+
   })
 
   /**
@@ -40,9 +42,5 @@ export default class AdminProductUpdateValidator {
    * }
    *
    */
-  public messages: CustomMessages = {
-    'stock.number': 'The product stock must be a number',
-    'price.number': 'The Product price must be a number',
-    'is_active.boolean': 'The is_active field must be a boolean value',
-  }
+  public messages: CustomMessages = {}
 }

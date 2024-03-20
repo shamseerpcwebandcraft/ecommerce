@@ -6,9 +6,7 @@ export default class emailRepository {
 
   public async listProducts(
     page_no,
-    page_size,
-    start_date,
-    end_date
+    page_size
   ): Promise<any> {
     try {
       const pageNo: number = page_no || 1;
@@ -16,20 +14,17 @@ export default class emailRepository {
 
       const offset: number = (pageNo - 1) * pageSize;
 
-      const query: any = {};
 
-      if (start_date && end_date) {
-        query.createdAt = { $gte: start_date, $lte: end_date };
-      }
-
-      const isProductExist = await Product.find(query)
+      const Products = await Product.find()
         .skip(offset)
         .limit(pageSize)
         .sort({ createdAt: -1 });
 
-      let Response = { isProductExist };
+        let total_count=Products.length
 
-      return Response;
+       let products={Products,total_count:total_count}
+
+      return products;
     } catch (error) {
       return error;
     }
@@ -52,9 +47,9 @@ export default class emailRepository {
         await isProductExist.save();
       }
 
-      let Response = { isProductExist };
 
-      return Response;
+
+      return isProductExist;
     } catch (error) {
       return error;
     }
@@ -78,14 +73,27 @@ export default class emailRepository {
         query.createdAt = { $gte: start_date, $lte: end_date };
       }
 
-      const isOrderExist = await Order.find(query)
+      const order = await Order.find(query)
         .skip(offset)
         .limit(pageSize)
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1 })
+        .select({
+          items: 1,
+          userDetails: 1,
+          payment_status: 1,
+          payment_mode: 1,
+          shipping_address: 1,
+          payable_price: 1,
+          shipping_charge: 1,
+          delivered_status: 1
+      });
 
-      let Response = { isOrderExist };
+      let total_count=order.length
 
-      return Response;
+      let orders={order,total_count:total_count}
+
+     return orders;
+
     } catch (error) {
       return error;
     }
@@ -97,13 +105,13 @@ export default class emailRepository {
 
       order.delivered_status = delivared_status;
 
-      // Save the updated order
+
       await order.save();
 
-      // Return a response indicating success
+
       return true;
     } catch (error) {
-      // Handle any errors that occur during the process
+
       return false;
     }
   }
@@ -124,20 +132,24 @@ export default class emailRepository {
 
       if (start_date && end_date) {
         query.createdAt = { $gte: start_date, $lte: end_date };
+        query.payment_status="completed"
+        query.delivered_status = "delivered"
+      }else{
+        query.payment_status="completed"
+        query.delivered_status = "delivered"
       }
 
-      const isOrderExist = await Order.find(query)
+      const order = await Order.find(query)
         .skip(offset)
         .limit(pageSize)
-        .sort({ createdAt: -1 });
+        .sort({ createdAt: -1});
 
-        let order=isOrderExist.filter(orders=>{
-            orders.delivered_status==="delivered"&&orders.payment_status==="completed"
-        })
+     
+        let total_count=order.length
 
-      // let Response = { isOrderExist };
+       let products={order,total_count:total_count}
 
-      return order;
+      return products;
     } catch (error) {
       return false;
     }
@@ -145,25 +157,21 @@ export default class emailRepository {
 
   public async adminDashboard(): Promise<any> {
     try {
-      const products = await Product.find({ is_active: true });
-      const order = await Order.find();
+      const products = await Product.countDocuments({ is_active: true })
 
-      let total_products = products.length;
-      let total_orders = order.length;
-      let sales = order.filter((orders) => {
-        console.log("orders==",orders)
-        orders.delivered_status === "delivered" 
-          // orders.payment_status === "completed";
-      });
-      let sales_quantity = sales.length;
+      const totalOrdersCount = await Order.countDocuments();
+
+      const completedOrdersCount = await Order.countDocuments({ payment_status: "completed", delivered_status: "delivered" });
+
 
       return {
-        total_products: total_products,
-        total_orders: total_orders,
-        sales: sales_quantity,
+        total_products: products,
+        total_orders: totalOrdersCount,
+        sales: completedOrdersCount,
       };
     } catch (error) {
       return false;
     }
   }
 }
+
