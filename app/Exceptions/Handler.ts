@@ -30,7 +30,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
     super(Logger)
   }
 
-
+ 
 public async handle(error: any, ctx: HttpContextContract) {
 
 
@@ -38,9 +38,14 @@ public async handle(error: any, ctx: HttpContextContract) {
    * Self handle the validation exception
    */
   if (error.code === 'E_VALIDATION_FAILURE') {
+    let array=error.messages.errors
+    const newArray = array.map(data => {
+      const { rule, ...rest } = data;
+      return rest;
+    });
 
-    let response=makeJsonResponse('check the data entered', {}, error.messages.errors[0].message,error.status)
-    console.log()
+    let response=makeJsonResponse('check the data entered', {}, newArray,error.status)
+    console.log(error.messages.errors)
   //makeJsonResponse()
     return ctx.response.status(422).json(response);
 
