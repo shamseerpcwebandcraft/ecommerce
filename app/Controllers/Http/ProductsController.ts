@@ -6,6 +6,7 @@ import UserCartValidator from 'App/Validators/UserCartValidator'
 import UserCheckoutValidator from 'App/Validators/UserCheckoutValidator'
 import UserCartUpdateValidator from 'App/Validators/UserCartUpdateValidator'
 import DelivaryAgentValidator from 'App/Validators/DelivaryAgentValidator'
+import ProductListingValidator from 'App/Validators/ProductListingValidator'
 
 export default class ProductsController {
     private productRepository: productRepository
@@ -67,8 +68,11 @@ export default class ProductsController {
     let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
     let isSuccess: boolean = false
     let response: APIResponse
+    console.log("enthanapaa")
+
+    let { search } = await ctx.request.validate(ProductListingValidator)
   
-    const productListingResponse = await this.productRepository.listproducts()
+    const productListingResponse = await this.productRepository.listproducts(search)
   
     if (!productListingResponse) {
       response = makeJsonResponse('no products available', {}, {}, httpStatusCode)
