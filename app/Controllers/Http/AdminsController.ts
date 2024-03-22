@@ -22,9 +22,9 @@ export default class AdminsController {
         let isSuccess: boolean = false
         let response: APIResponse
 
-        let { page_no,page_size } = await ctx.request.validate(AdminProductListingValidator)
+        let { page_no,page_size,search } = await ctx.request.validate(AdminProductListingValidator)
       
-        const productListingResponse = await this.adminRepository.listProducts(page_no,page_size)
+        const productListingResponse = await this.adminRepository.listProducts(page_no,page_size,search)
       
         if (!productListingResponse) {
           response = makeJsonResponse('no products available', {}, {}, httpStatusCode)

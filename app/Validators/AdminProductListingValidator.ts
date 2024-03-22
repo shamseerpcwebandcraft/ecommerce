@@ -25,7 +25,8 @@ export default class AdminProductListingValidator {
    */
   public schema = schema.create({
     page_no:schema.number.optional(),
-    page_size:schema.number.optional()
+    page_size:schema.number.optional(),
+    search:schema.string.optional()
   })
 
   /**
@@ -39,5 +40,9 @@ export default class AdminProductListingValidator {
    * }
    *
    */
-  public messages: CustomMessages = {}
+  public messages: CustomMessages = {
+    'page_no.number':'page number is mustbe a number',
+    'page_size.number':'page size must be a number',
+    'search.string':'search is must be a string value'
+  }
 }

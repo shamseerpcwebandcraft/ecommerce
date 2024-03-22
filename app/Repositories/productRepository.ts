@@ -29,26 +29,20 @@ export default class productRepository {
     public async listproducts(search): Promise<any> {
  
           try {
+            console.log(search)
   
-          const query:any = {};
+            let query:any = { is_active: true };
 
-          if(search){
-            query.name=search;
-            query.is_active=true;
-          }else{
-
-            query.is_active=true
-          }
-          
-        
-          
-       
-      const isProductExist = await Product.find(query);
+            if (search) {
+              query.name = { $regex: search, $options: 'i' };
+            }
+      
+            const products = await Product.find(query);
 
             
 
   
-      return isProductExist
+      return products
           
     } catch (error) {
      return error;

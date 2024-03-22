@@ -68,7 +68,6 @@ export default class ProductsController {
     let httpStatusCode: number = HttpStatusCodes.HTTP_VALIDATION_ERROR
     let isSuccess: boolean = false
     let response: APIResponse
-    console.log("enthanapaa")
 
     let { search } = await ctx.request.validate(ProductListingValidator)
   

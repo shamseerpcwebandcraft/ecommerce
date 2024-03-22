@@ -6,7 +6,8 @@ export default class emailRepository {
 
   public async listProducts(
     page_no,
-    page_size
+    page_size,
+    search
   ): Promise<any> {
     try {
       const pageNo: number = page_no || 1;
@@ -14,8 +15,15 @@ export default class emailRepository {
 
       const offset: number = (pageNo - 1) * pageSize;
 
+      let query:any = { is_active: true };
+      console.log(search)
 
-      const Products = await Product.find()
+      if (search) {
+        query.name = { $regex: search, $options: 'i' };
+      }
+
+
+      const Products = await Product.find(query)
         .skip(offset)
         .limit(pageSize)
         .sort({ createdAt: -1 });
